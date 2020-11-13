@@ -31,7 +31,7 @@ export default function AsyncRouter<APIDef extends RestypedBase>(
     ) => Promise<APIDef[Path][Method]['response']>
   ) {
     const route: express.IRouterMatcher<void> = app[method.toLowerCase()]
-    route(path, function(req, res, next) {
+    route(path as string, function(req, res, next) {
       return handler(req, res)
         .then(result => {
           if (!res.headersSent) {
