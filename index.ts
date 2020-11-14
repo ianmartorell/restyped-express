@@ -67,78 +67,82 @@ export default function AsyncRouter<APIDef extends RestypedBase>(
     route(path as string, handlers)
   }
 
-  return {
-    route: createAsyncRoute,
-    use: app.use.bind(app),
-    get: function<Path extends keyof APIDef>(
-      path: Path,
-      handler: TypedHandler<
-        APIDef[Path]['GET'],
-        APIDef[Path]['GET']['response']
-      >,
-      ...middlewares: Handler[]
-    ) {
-      return createAsyncRoute(path, 'GET', handler, middlewares)
-    },
-    post: function<Path extends keyof APIDef>(
-      path: Path,
-      handler: TypedHandler<
-        APIDef[Path]['POST'],
-        APIDef[Path]['POST']['response']
-      >,
-      ...middlewares: Handler[]
-    ) {
-      return createAsyncRoute(path, 'POST', handler, middlewares)
-    },
-    put: function<Path extends keyof APIDef>(
-      path: Path,
-      handler: TypedHandler<
-        APIDef[Path]['PUT'],
-        APIDef[Path]['PUT']['response']
-      >,
-      ...middlewares: Handler[]
-    ) {
-      return createAsyncRoute(path, 'PUT', handler, middlewares)
-    },
-    delete: function<Path extends keyof APIDef>(
-      path: Path,
-      handler: TypedHandler<
-        APIDef[Path]['DELETE'],
-        APIDef[Path]['DELETE']['response']
-      >,
-      ...middlewares: Handler[]
-    ) {
-      return createAsyncRoute(path, 'DELETE', handler, middlewares)
-    },
-    patch: function<Path extends keyof APIDef>(
-      path: Path,
-      handler: TypedHandler<
-        APIDef[Path]['PATCH'],
-        APIDef[Path]['PATCH']['response']
-      >,
-      ...middlewares: Handler[]
-    ) {
-      return createAsyncRoute(path, 'PATCH', handler, middlewares)
-    },
-    options: function<Path extends keyof APIDef>(
-      path: Path,
-      handler: TypedHandler<
-        APIDef[Path]['OPTIONS'],
-        APIDef[Path]['OPTIONS']['response']
-      >,
-      ...middlewares: Handler[]
-    ) {
-      return createAsyncRoute(path, 'OPTIONS', handler, middlewares)
-    },
-    head: function<Path extends keyof APIDef>(
-      path: Path,
-      handler: TypedHandler<
-        APIDef[Path]['HEAD'],
-        APIDef[Path]['HEAD']['response']
-      >,
-      ...middlewares: Handler[]
-    ) {
-      return createAsyncRoute(path, 'HEAD', handler, middlewares)
-    }
+  function router(req: express.Request, res: express.Response, next: express.NextFunction) {
+    app(req, res, next);
   }
+
+  router.use = app.use.bind(app);
+  router.route = createAsyncRoute;
+  router.get = function<Path extends keyof APIDef>(
+    path: Path,
+    handler: TypedHandler<
+      APIDef[Path]['GET'],
+      APIDef[Path]['GET']['response']
+    >,
+    ...middlewares: Handler[]
+  ) {
+    return createAsyncRoute(path, 'GET', handler, middlewares)
+  };
+  router.post = function<Path extends keyof APIDef>(
+    path: Path,
+    handler: TypedHandler<
+      APIDef[Path]['POST'],
+      APIDef[Path]['POST']['response']
+    >,
+    ...middlewares: Handler[]
+  ) {
+    return createAsyncRoute(path, 'POST', handler, middlewares)
+  };
+  router.put = function<Path extends keyof APIDef>(
+    path: Path,
+    handler: TypedHandler<
+      APIDef[Path]['PUT'],
+      APIDef[Path]['PUT']['response']
+    >,
+    ...middlewares: Handler[]
+  ) {
+    return createAsyncRoute(path, 'PUT', handler, middlewares)
+  };
+  router.delete = function<Path extends keyof APIDef>(
+    path: Path,
+    handler: TypedHandler<
+      APIDef[Path]['DELETE'],
+      APIDef[Path]['DELETE']['response']
+    >,
+    ...middlewares: Handler[]
+  ) {
+    return createAsyncRoute(path, 'DELETE', handler, middlewares)
+  };
+  router.patch = function<Path extends keyof APIDef>(
+    path: Path,
+    handler: TypedHandler<
+      APIDef[Path]['PATCH'],
+      APIDef[Path]['PATCH']['response']
+    >,
+    ...middlewares: Handler[]
+  ) {
+    return createAsyncRoute(path, 'PATCH', handler, middlewares)
+  };
+  router.options = function<Path extends keyof APIDef>(
+    path: Path,
+    handler: TypedHandler<
+      APIDef[Path]['OPTIONS'],
+      APIDef[Path]['OPTIONS']['response']
+    >,
+    ...middlewares: Handler[]
+  ) {
+    return createAsyncRoute(path, 'OPTIONS', handler, middlewares)
+  };
+  router.head = function<Path extends keyof APIDef>(
+    path: Path,
+    handler: TypedHandler<
+      APIDef[Path]['HEAD'],
+      APIDef[Path]['HEAD']['response']
+    >,
+    ...middlewares: Handler[]
+  ) {
+    return createAsyncRoute(path, 'HEAD', handler, middlewares)
+  }
+
+  return router;
 }
