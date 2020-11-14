@@ -27,7 +27,7 @@ type HTTPMethod =
   | 'DELETE'
   | 'OPTIONS'
 
-export default function AsyncRouter<APIDef extends RestypedBase>(
+export default function RestypedRouter<APIDef extends RestypedBase>(
   app: express.Express | express.Router
 ) {
   const createAsyncRoute = function<
