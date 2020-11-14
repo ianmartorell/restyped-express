@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rawrmaan/restyped-express-async.git"
+    "url": "git+https://github.com/ianmartorell/restyped-express.git"
   },
-  "author": "Arman Dezfuli-Arjomandi",
+  "author": "Ian Martorell",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/rawrmaan/restyped-express-async/issues"
+    "url": "https://github.com/ianmartorell/restyped-express/issues"
   },
-  "homepage": "https://github.com/rawrmaan/restyped-express-async#readme",
+  "homepage": "https://github.com/ianmartorell/restyped-express#readme",
   "dependencies": {
     "@types/express": "*",
     "restyped": "*"
