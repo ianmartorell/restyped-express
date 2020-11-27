@@ -13,6 +13,8 @@ type Handler = (
   next: express.NextFunction
 ) => void
 
+type HandlerOrArray = Handler | Handler[]
+
 type TypedHandler<T extends RestypedRoute, Response> = (
   req: TypedRequest<T>,
   res: express.Response
@@ -40,9 +42,10 @@ export default function RestypedRouter<APIDef extends RestypedBase>(
       APIDef[Path][Method],
       APIDef[Path][Method]['response']
     >,
-    middlewares: Handler[]
+    middlewares: HandlerOrArray[]
   ) {
-    const handlers = [...middlewares]
+    const handlers = [];
+    middlewares.forEach(m => Array.isArray(m) ? handlers.push(...m) : handlers.push(m))
     handlers.push(
       (
         req: express.Request,
@@ -79,7 +82,7 @@ export default function RestypedRouter<APIDef extends RestypedBase>(
       APIDef[Path]['GET'],
       APIDef[Path]['GET']['response']
     >,
-    ...middlewares: Handler[]
+    ...middlewares: HandlerOrArray[]
   ) {
     return createAsyncRoute(path, 'GET', handler, middlewares)
   };
@@ -89,7 +92,7 @@ export default function RestypedRouter<APIDef extends RestypedBase>(
       APIDef[Path]['POST'],
       APIDef[Path]['POST']['response']
     >,
-    ...middlewares: Handler[]
+    ...middlewares: HandlerOrArray[]
   ) {
     return createAsyncRoute(path, 'POST', handler, middlewares)
   };
@@ -99,7 +102,7 @@ export default function RestypedRouter<APIDef extends RestypedBase>(
       APIDef[Path]['PUT'],
       APIDef[Path]['PUT']['response']
     >,
-    ...middlewares: Handler[]
+    ...middlewares: HandlerOrArray[]
   ) {
     return createAsyncRoute(path, 'PUT', handler, middlewares)
   };
@@ -109,7 +112,7 @@ export default function RestypedRouter<APIDef extends RestypedBase>(
       APIDef[Path]['DELETE'],
       APIDef[Path]['DELETE']['response']
     >,
-    ...middlewares: Handler[]
+    ...middlewares: HandlerOrArray[]
   ) {
     return createAsyncRoute(path, 'DELETE', handler, middlewares)
   };
@@ -119,7 +122,7 @@ export default function RestypedRouter<APIDef extends RestypedBase>(
       APIDef[Path]['PATCH'],
       APIDef[Path]['PATCH']['response']
     >,
-    ...middlewares: Handler[]
+    ...middlewares: HandlerOrArray[]
   ) {
     return createAsyncRoute(path, 'PATCH', handler, middlewares)
   };
@@ -129,7 +132,7 @@ export default function RestypedRouter<APIDef extends RestypedBase>(
       APIDef[Path]['OPTIONS'],
       APIDef[Path]['OPTIONS']['response']
     >,
-    ...middlewares: Handler[]
+    ...middlewares: HandlerOrArray[]
   ) {
     return createAsyncRoute(path, 'OPTIONS', handler, middlewares)
   };
@@ -139,7 +142,7 @@ export default function RestypedRouter<APIDef extends RestypedBase>(
       APIDef[Path]['HEAD'],
       APIDef[Path]['HEAD']['response']
     >,
-    ...middlewares: Handler[]
+    ...middlewares: HandlerOrArray[]
   ) {
     return createAsyncRoute(path, 'HEAD', handler, middlewares)
   }
